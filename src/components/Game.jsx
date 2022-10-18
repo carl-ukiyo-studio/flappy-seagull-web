@@ -5,6 +5,7 @@ const Game = () => {
   const {
     unityProvider,
     UNSAFE__detachAndUnloadImmediate: detachAndUnloadImmediate,
+    isLoaded, loadingProgression
   } = useUnityContext({
     loaderUrl: "/game/FlappySeagull.loader.js",
     dataUrl: "/game/FlappySeagull.data.unityweb",
@@ -20,12 +21,23 @@ const Game = () => {
     };
   }, [detachAndUnloadImmediate]);
 
+  // We'll round the loading progression to a whole number to represent the
+  // percentage of the Unity Application that has loaded.
+  const loadingPercentage = Math.round(loadingProgression * 100);
+
   return (
     <div>
       <Unity
         style={{ width: "1070px", height: "600px" }}
         unityProvider={unityProvider}
       />
+      {isLoaded === false && (
+        // We'll conditionally render the loading overlay if the Unity
+        // Application is not loaded.
+        <div className="bg-gray-800 flex justify-center align-middle text-white font-medium  text-2xl">
+          <p>Loading... ({loadingPercentage}%)</p>
+        </div>
+      )}
     </div>
   );
 };
