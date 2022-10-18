@@ -1,14 +1,33 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Unity, useUnityContext } from "react-unity-webgl";
 
 const Game = () => {
-  const { unityProvider } = useUnityContext({
-    loaderUrl: "build/myunityapp.loader.js",
-    dataUrl: "build/myunityapp.data",
-    frameworkUrl: "build/myunityapp.framework.js",
-    codeUrl: "build/myunityapp.wasm",
+  const {
+    unityProvider,
+    UNSAFE__detachAndUnloadImmediate: detachAndUnloadImmediate,
+  } = useUnityContext({
+    loaderUrl: "/game/FlappySeagull.loader.js",
+    dataUrl: "/game/FlappySeagull.data.unityweb",
+    frameworkUrl: "/game/FlappySeagull.framework.js.unityweb",
+    codeUrl: "/game/FlappySeagull.wasm.unityweb",
   });
-  return <Unity unityProvider={unityProvider} />;
+
+  useEffect(() => {
+    return () => {
+      detachAndUnloadImmediate().catch((reason) => {
+        console.log(reason);
+      });
+    };
+  }, [detachAndUnloadImmediate]);
+
+  return (
+    <div>
+      <Unity
+        style={{ width: "1070px", height: "600px" }}
+        unityProvider={unityProvider}
+      />
+    </div>
+  );
 };
 
 export default Game;
