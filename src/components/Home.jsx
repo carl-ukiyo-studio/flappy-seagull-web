@@ -8,8 +8,8 @@ const Home = () => (
     <Link to="/game">
       <Button>Play</Button>
     </Link>
-    <div className="block max-w-md rounded-lg border border-gray-900 bg-gray-800 p-6 shadow-md text-center">
-      <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+    <div className="block max-w-sm rounded-lg border border-gray-900 bg-gray-800 p-6 shadow-md text-center">
+      <h5 className="mb-2 text-lg sm:text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
         You are a seagull trying to navigate the streets of Brighton City.
       </h5>
       <p className="text-sm font-normal text-gray-700 dark:text-gray-400">

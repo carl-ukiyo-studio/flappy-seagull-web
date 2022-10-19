@@ -26,9 +26,9 @@ const Game = () => {
   const loadingPercentage = Math.round(loadingProgression * 100);
 
   return (
-    <div>
+    <div className="container mx-auto">
       <Unity
-        style={{ width: "1070px", height: "600px" }}
+        className="w-full"
         unityProvider={unityProvider}
       />
       {isLoaded === false && (
