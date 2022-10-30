@@ -1,15 +1,16 @@
-import Button from "./Button";
+import PlayForm from "./PlayForm";
 import Header from "./Header";
-import { Link } from "react-router-dom";
+import LeaderboardButton from "./LeaderboardButton";
 
 const Home = () => (
   <>
-    <Header />
-    <Link to="/game">
-      <Button>Play</Button>
-    </Link>
-    <div className="block max-w-sm rounded-lg border border-gray-900 bg-gray-800 p-6 shadow-md text-center">
-      <h5 className="mb-2 text-lg sm:text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+    <Header/>
+
+    <PlayForm/>
+    <LeaderboardButton/>
+
+    <div className="block max-w-sm rounded-lg border border-gray-900 bg-gray-800 p-6 text-center shadow-md">
+      <h5 className="mb-2 text-lg font-bold tracking-tight text-gray-900 dark:text-white sm:text-2xl">
         You are a seagull trying to navigate the streets of Brighton City.
       </h5>
       <p className="text-sm font-normal text-gray-700 dark:text-gray-400">
