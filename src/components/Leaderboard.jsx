@@ -1,7 +1,6 @@
-import BackButton from "./BackButton";
 import { useEffect, useState } from "react";
 import { db } from "../firebase-config";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, query, orderBy } from "firebase/firestore";
 import trophy from "../assets/trophy.png";
 
 const Leaderboard = () => {
@@ -9,10 +8,11 @@ const Leaderboard = () => {
   const [loading, setLoading] = useState(false);
 
   const playersCollectionRef = collection(db, "players");
+  const playersQuery = query(playersCollectionRef, orderBy("score", "desc"));
 
   const getPlayers = async () => {
     setLoading(true);
-    const data = await getDocs(playersCollectionRef);
+    const data = await getDocs(playersQuery);
     const playersData = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
     setPlayers(playersData);
   };
@@ -67,7 +67,7 @@ const LeaderboardTable = ({ players }) => (
             >
               {index + 1}
             </th>
-            <td className="py-4 px-6">{player.name}</td>
+            <td className="py-4 px-6">{player.id}</td>
             <td className="py-4 px-6">{player.score}</td>
           </tr>
         ))}
