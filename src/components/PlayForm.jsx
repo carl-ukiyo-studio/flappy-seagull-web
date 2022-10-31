@@ -12,7 +12,7 @@ const PlayForm = () => {
 
   const onSubmit = (data) => {
     console.log(data);
-    localStorage.setItem('name', data.name);
+    localStorage.setItem('username', data.name);
     navigate("/game");
   };
 

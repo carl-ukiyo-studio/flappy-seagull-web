@@ -21,6 +21,7 @@ const Leaderboard = () => {
     getPlayers().then(() => {
       setLoading(false);
     });
+    // eslint-disable-next-line
   }, []);
 
   return (
