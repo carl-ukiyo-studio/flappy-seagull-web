@@ -1,12 +1,16 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Unity, useUnityContext } from "react-unity-webgl";
 import { useNavigate } from "react-router-dom";
+import { db } from "../firebase-config";
+import { doc, getDoc, setDoc } from "firebase/firestore";
+import { debug } from "prettier/doc";
 
 const Game = () => {
   const [isGameOver, setIsGameOver] = useState(false);
-  const [userName, setUserName] = useState("");
   const [score, setScore] = useState(0);
+  const [highScore, setHighScore] = useState(0);
   const navigate = useNavigate();
+  const userName = localStorage.getItem("username");
 
   const {
     unityProvider,
@@ -22,10 +26,51 @@ const Game = () => {
     codeUrl: "/game/FlappySeagull.wasm.unityweb",
   });
 
+  const getPlayer = async () => {
+    debugger;
+    const docRef = doc(db, "players", userName);
+    try {
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        const player = docSnap.data();
+        console.log(player);
+        setHighScore(player.score);
+        console.log(highScore);
+      } else {
+        console.log("Document does not exist");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const saveHighScore = (score) => {
+    debugger;
+    if (score > highScore) {
+      setHighScore(score);
+      saveHighScoreToDatabase(score);
+    }
+  };
+
+  const saveHighScoreToDatabase = (score) => {
+    const docRef = doc(db, "players", userName);
+    const data = {
+      score: score,
+    };
+    setDoc(docRef, data)
+      .then((docRef) => {
+        console.log("Entire Document has been updated successfully");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   const handleGameOver = useCallback((score) => {
     setIsGameOver(true);
     setScore(score);
     console.log(`Game Over ${userName}! You've scored ${score} points.`);
+    saveHighScore(score);
   }, []);
 
   const handlePlayAgain = useCallback(() => {
@@ -37,20 +82,6 @@ const Game = () => {
     navigate("/");
   }
 
-  const Initialise = () => {
-    const userNameFromLocalStorage = localStorage.getItem("username");
-    if (userNameFromLocalStorage == null) {
-      goBackToHomePage();
-    } else {
-      setUserName(userNameFromLocalStorage);
-    }
-  };
-
-  useEffect(() => {
-    Initialise();
-    // eslint-disable-next-line
-  }, []);
-
   useEffect(() => {
     return () => {
       detachAndUnloadImmediate().catch((reason) => {
@@ -60,8 +91,13 @@ const Game = () => {
   }, [detachAndUnloadImmediate]);
 
   useEffect(() => {
-    addEventListener("GameOver", handleGameOver);
-    addEventListener("PlayAgain", handlePlayAgain);
+    if (userName == null) {
+      goBackToHomePage();
+    }
+    getPlayer().then((r) => {
+      addEventListener("GameOver", handleGameOver);
+      addEventListener("PlayAgain", handlePlayAgain);
+    });
     return () => {
       removeEventListener("GameOver", handleGameOver);
       removeEventListener("PlayAgain", handlePlayAgain);
@@ -83,7 +119,7 @@ const Game = () => {
         </div>
       )}
       {isGameOver === true && (
-        <div className="flex justify-center bg-gray-800 align-middle text-2xl font-medium text-white mt-4 py-4">
+        <div className="mt-4 flex justify-center bg-gray-800 py-4 align-middle text-2xl font-medium text-white">
           <p>{`Game Over ${userName}! You've scored ${score} points.`}</p>
         </div>
       )}
