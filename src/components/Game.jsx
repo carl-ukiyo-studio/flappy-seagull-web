@@ -3,7 +3,6 @@ import { Unity, useUnityContext } from "react-unity-webgl";
 import { useNavigate } from "react-router-dom";
 import { db } from "../firebase-config";
 import { doc, getDoc, setDoc } from "firebase/firestore";
-import { debug } from "prettier/doc";
 
 const Game = () => {
   const [isGameOver, setIsGameOver] = useState(false);
@@ -71,6 +70,7 @@ const Game = () => {
     setScore(score);
     console.log(`Game Over ${userName}! You've scored ${score} points.`);
     saveHighScore(score);
+    // eslint-disable-next-line
   }, []);
 
   const handlePlayAgain = useCallback(() => {
@@ -102,6 +102,7 @@ const Game = () => {
       removeEventListener("GameOver", handleGameOver);
       removeEventListener("PlayAgain", handlePlayAgain);
     };
+    // eslint-disable-next-line
   }, [addEventListener, removeEventListener, handleGameOver]);
 
   // We'll round the loading progression to a whole number to represent the
