@@ -1,20 +1,33 @@
 import unity from "../assets/unity.png";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 const PlayForm = () => {
   const {
     register,
     formState: {errors},
     handleSubmit,
+    setValue,
   } = useForm();
   const navigate = useNavigate();
 
   const onSubmit = (data) => {
     console.log(data);
-    localStorage.setItem('name', data.name);
+    localStorage.setItem("username", data.name);
     navigate("/game");
   };
+
+  const checkForUserName = () => {
+    const userName = localStorage.getItem("username");
+    if (userName) {
+      setValue("name", userName);
+    }
+  };
+
+  useEffect(() => {
+    checkForUserName();
+  }, []);
 
   return (
     <form
@@ -36,7 +49,7 @@ const PlayForm = () => {
         {errors.name?.type === "required" && (
           <p
             role="alert"
-            className="mt-2 text-sm text-red-600 dark:text-red-500 text-center"
+            className="mt-2 text-center text-sm text-red-600 dark:text-red-500"
           >
             Please enter your name to play
           </p>
@@ -58,7 +71,8 @@ const PlayForm = () => {
 const styles = {
   label: {
     normal: "block mb-2 text-sm font-medium text-gray-300 text-center",
-    error: "block mb-2 text-sm font-medium text-red-700 dark:text-red-500 text-center",
+    error:
+      "block mb-2 text-sm font-medium text-red-700 dark:text-red-500 text-center",
   },
   input: {
     normal:
