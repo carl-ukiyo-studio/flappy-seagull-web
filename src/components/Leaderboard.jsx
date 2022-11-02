@@ -12,8 +12,8 @@ const Leaderboard = () => {
 
   const getPlayers = async () => {
     setLoading(true);
-    const data = await getDocs(playersQuery);
-    const playersData = data.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+    const snapshot = await getDocs(playersQuery);
+    const playersData = snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
     setPlayers(playersData);
   };
 
