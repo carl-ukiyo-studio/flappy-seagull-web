@@ -27,6 +27,7 @@ const PlayForm = () => {
 
   useEffect(() => {
     checkForUserName();
+    // eslint-disable-next-line
   }, []);
 
   return (
