@@ -4,12 +4,12 @@ import { useNavigate } from "react-router-dom";
 import { db } from "../firebase-config";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import FullScreenButton from "./FullScreenButton";
+import { BrowserView, MobileView } from "react-device-detect";
 
 const Game = () => {
   const [highScore, setHighScore] = useState(0);
   const navigate = useNavigate();
   const userName = localStorage.getItem("username");
-
   const {
     unityProvider,
     UNSAFE__detachAndUnloadImmediate: detachAndUnloadImmediate,
@@ -116,9 +116,18 @@ const Game = () => {
         </div>
       )}
       {isLoaded === true && (
-        <div className="flex w-auto justify-center py-4">
-          <FullScreenButton onFullScreen={onFullScreen}></FullScreenButton>
-        </div>
+        <>
+          <BrowserView>
+            <div className="flex w-auto justify-center py-4">
+              <FullScreenButton onFullScreen={onFullScreen}></FullScreenButton>
+            </div>
+          </BrowserView>
+          <MobileView>
+            <div className="flex w-auto justify-center py-4">
+              <p className='text-sm'>Rotate your screen for bigger view 🔄️</p>
+            </div>
+          </MobileView>
+        </>
       )}
     </div>
   );
